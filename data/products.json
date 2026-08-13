@@ -1,0 +1,103 @@
+[
+  {
+    "id": 1,
+    "name": "Audífonos Inalámbricos Pro",
+    "description": "<p>Audífonos de alta fidelidad con cancelación de ruido activa. Perfectos para música, trabajo y gaming. Batería de 30 horas y conectividad Bluetooth 5.0.</p>",
+    "price": 89.99,
+    "stock": 25,
+    "category_id": 1,
+    "featured": true,
+    "images": ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80"],
+    "variants": [
+      {"id": 1, "name": "Color", "value": "Negro", "price_adjustment": 0, "stock": 10},
+      {"id": 2, "name": "Color", "value": "Blanco", "price_adjustment": 5, "stock": 15}
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Smartwatch Elite",
+    "description": "<p>Reloj inteligente con monitor cardíaco, GPS integrado, resistencia al agua IP68. Compatible con iOS y Android.</p>",
+    "price": 149.99,
+    "stock": 15,
+    "category_id": 1,
+    "featured": true,
+    "images": ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80"],
+    "variants": []
+  },
+  {
+    "id": 3,
+    "name": "Camiseta Premium Algodón",
+    "description": "<p>Camiseta de algodón 100% pima, suave al tacto y duradera. Disponible en múltiples tallas y colores.</p>",
+    "price": 29.99,
+    "stock": 50,
+    "category_id": 2,
+    "featured": true,
+    "images": ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80"],
+    "variants": [
+      {"id": 3, "name": "Talla", "value": "S", "price_adjustment": 0, "stock": 10},
+      {"id": 4, "name": "Talla", "value": "M", "price_adjustment": 0, "stock": 20},
+      {"id": 5, "name": "Talla", "value": "L", "price_adjustment": 0, "stock": 15},
+      {"id": 6, "name": "Talla", "value": "XL", "price_adjustment": 2, "stock": 5}
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Mochila Urbana Impermeable",
+    "description": "<p>Mochila de 30L con compartimento para laptop hasta 15.6\", material impermeable y diseño ergonómico.</p>",
+    "price": 59.99,
+    "stock": 30,
+    "category_id": 3,
+    "featured": true,
+    "images": ["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80"],
+    "variants": []
+  },
+  {
+    "id": 5,
+    "name": "Lámpara LED Escritorio",
+    "description": "<p>Lámpara de escritorio con ajuste de brillo y temperatura de color. Puerto USB cargador integrado.</p>",
+    "price": 45.99,
+    "stock": 20,
+    "category_id": 4,
+    "featured": false,
+    "images": ["https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80"],
+    "variants": []
+  },
+  {
+    "id": 6,
+    "name": "Zapatillas Running Air",
+    "description": "<p>Zapatillas deportivas con suela de amortiguación Air, transpirables y ligeras. Ideales para running y gimnasio.</p>",
+    "price": 79.99,
+    "stock": 40,
+    "category_id": 2,
+    "featured": true,
+    "images": ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80"],
+    "variants": [
+      {"id": 7, "name": "Talla", "value": "38", "price_adjustment": 0, "stock": 8},
+      {"id": 8, "name": "Talla", "value": "39", "price_adjustment": 0, "stock": 10},
+      {"id": 9, "name": "Talla", "value": "40", "price_adjustment": 0, "stock": 12},
+      {"id": 10, "name": "Talla", "value": "41", "price_adjustment": 0, "stock": 10}
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Teclado Mecánico RGB",
+    "description": "<p>Teclado mecánico con switches Cherry MX Blue, iluminación RGB programable y construcción en aluminio.</p>",
+    "price": 119.99,
+    "stock": 12,
+    "category_id": 1,
+    "featured": false,
+    "images": ["https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80"],
+    "variants": []
+  },
+  {
+    "id": 8,
+    "name": "Silla Ergonómica Pro",
+    "description": "<p>Silla de oficina con soporte lumbar ajustable, reposabrazos 4D y asiento de espuma memory foam.</p>",
+    "price": 299.99,
+    "stock": 8,
+    "category_id": 4,
+    "featured": false,
+    "images": ["https://images.unsplash.com/photo-1541558869434-2840d308329a?w=600&q=80"],
+    "variants": []
+  }
+]

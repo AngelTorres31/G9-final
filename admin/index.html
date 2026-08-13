@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - G9 Imports</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background: var(--bg); }
+    .admin-wrap { display: flex; min-height: 100vh; }
+
+    /* Login */
+    .login-screen {
+      position: fixed; inset: 0;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 999;
+    }
+    .login-box {
+      background: white;
+      border-radius: 24px;
+      padding: 3rem;
+      width: 360px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+      animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .login-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+    .login-sub { text-align: center; font-size: 0.85rem; color: #86868b; margin-bottom: 2rem; }
+    .login-box .form-control { margin-bottom: 1rem; border-radius: 10px; }
+    .login-hint { font-size: 0.78rem; color: #86868b; text-align: center; margin-top: 1rem; }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 240px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .sidebar-nav { flex: 1; }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-link:hover { color: var(--primary); background: linear-gradient(135deg, rgba(0,122,255,0.06), rgba(0,212,255,0.06)); }
+    .sidebar-link.active { color: var(--primary); background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(0,212,255,0.1)); font-weight: 600; }
+    .sidebar-link i { width: 20px; text-align: center; }
+    .sidebar-bottom { padding: 1rem 1.5rem; border-top: 1px solid var(--border); }
+
+    /* Main */
+    .admin-main {
+      flex: 1;
+      margin-left: 240px;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .admin-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .admin-page-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--text-dark); }
+
+    /* Stats grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: box-shadow 0.2s;
+    }
+    .stat-card:hover { box-shadow: var(--shadow-md); }
+    .stat-icon {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .stat-icon.blue { background: linear-gradient(135deg, rgba(0,122,255,0.12), rgba(0,212,255,0.12)); color: var(--primary); }
+    .stat-icon.green { background: rgba(52,199,89,0.12); color: #34c759; }
+    .stat-icon.orange { background: rgba(255,159,10,0.12); color: #ff9f0a; }
+    .stat-icon.purple { background: rgba(175,82,222,0.12); color: #af52de; }
+    .stat-val { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--text-dark); }
+    .stat-lbl { font-size: 0.8rem; color: var(--text-light); }
+
+    /* Content panel */
+    .content-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-title { font-family: var(--font-display); font-weight: 700; font-size: 1rem; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-light);
+    }
+    td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-mid); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg); }
+
+    .page-hidden { display: none; }
+    .admin-hidden { display: none; }
+
+    /* Forms in admin */
+    .admin-form { max-width: 600px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    @media (max-width: 900px) {
+      .admin-sidebar { display: none; }
+      .admin-main { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">G9 Imports</div>
+    <div class="login-sub">Panel de Administración</div>
+    <form id="loginForm">
+      <input type="text" class="form-control" id="loginUser" placeholder="Usuario" required>
+      <input type="password" class="form-control" id="loginPass" placeholder="Contraseña" required>
+      <button type="submit" class="btn btn-primary btn-block" style="border-radius:10px;">
+        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+      </button>
+    </form>
+    <div class="login-hint">Usuario: <strong>admin</strong> · Contraseña: <strong>admin123</strong></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-wrap admin-hidden" id="adminPanel">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">⚙️ G9 Admin</div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+      <button class="sidebar-link" data-page="products"><i class="fas fa-box"></i> Productos</button>
+      <button class="sidebar-link" data-page="categories"><i class="fas fa-tags"></i> Categorías</button>
+      <button class="sidebar-link" data-page="orders"><i class="fas fa-shopping-bag"></i> Pedidos</button>
+      <button class="sidebar-link" data-page="customers"><i class="fas fa-users"></i> Clientes</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="sidebar-link" onclick="logout()" style="color:#ff3b30;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <!-- Dashboard -->
+    <div id="page-dashboard">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">Dashboard</h1>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon" id="themeIcon"></i></button>
+          <a href="../index.html" class="btn btn-ghost btn-sm" target="_blank"><i class="fas fa-external-link-alt"></i> Ver Tienda</a>
+        </div>
+      </div>
+      <div class="stats-grid" id="dash-stats"></div>
+      <div class="content-panel">
+        <div class="panel-header">
+          <span class="panel-title">Pedidos Recientes</span>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('orders')">Ver todos</button>
+        </div>
+        <div id="recent-orders-table"></div>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div id="page-products" class="page-hidden">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">Productos</h1>
+        <button class="btn btn-primary" onclick="showProductForm()"><i class="fas fa-plus"></i> Nuevo Producto</button>
+      </div>
+      <div class="content-panel">
+        <div id="products-table"></div>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div id="page-categories" class="page-hidden">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">Categorías</h1>
+      </div>
+      <div class="content-panel">
+        <div id="categories-table"></div>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div id="page-orders" class="page-hidden">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">Pedidos</h1>
+      </div>
+      <div class="content-panel">
+        <div id="orders-table"></div>
+      </div>
+    </div>
+
+    <!-- Customers -->
+    <div id="page-customers" class="page-hidden">
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">Clientes</h1>
+      </div>
+      <div class="content-panel">
+        <div id="customers-table"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script>
+  const ADMIN_USER = 'admin';
+  const ADMIN_PASS = 'admin123';
+  let currentPage = 'dashboard';
+
+  // Auth
+  document.getElementById('loginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (document.getElementById('loginUser').value === ADMIN_USER &&
+        document.getElementById('loginPass').value === ADMIN_PASS) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').classList.remove('admin-hidden');
+      renderPage('dashboard');
+    } else {
+      showToast('Credenciales incorrectas', 'error');
+    }
+  });
+
+  function logout() {
+    document.getElementById('adminPanel').classList.add('admin-hidden');
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  // Navigation
+  document.querySelectorAll('.sidebar-link[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showPage(btn.dataset.page);
+    });
+  });
+
+  function showPage(name) {
+    document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('page-hidden'));
+    document.getElementById(`page-${name}`).classList.remove('page-hidden');
+    currentPage = name;
+    renderPage(name);
+  }
+
+  // Theme toggle
+  const saved = localStorage.getItem('g9_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  function updateIcon(t) { document.getElementById('themeIcon').className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon'; }
+  updateIcon(saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('g9_theme', next);
+    updateIcon(next);
+  });
+
+  // Render pages
+  function renderPage(name) {
+    if (name === 'dashboard') renderDashboard();
+    if (name === 'products') renderProducts();
+    if (name === 'categories') renderCategories();
+    if (name === 'orders') renderOrders();
+    if (name === 'customers') renderCustomers();
+  }
+
+  function renderDashboard() {
+    const products = G9Store.getProducts();
+    const cats = G9Store.getCategories();
+    const orders = G9Store.orders.get();
+    const customers = [...new Set(orders.map(o => o.customer?.email).filter(Boolean))];
+    const revenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+
+    document.getElementById('dash-stats').innerHTML = `
+      <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-box"></i></div><div><div class="stat-val">${products.length}</div><div class="stat-lbl">Productos</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fas fa-shopping-bag"></i></div><div><div class="stat-val">${orders.length}</div><div class="stat-lbl">Pedidos</div></div></div>
+      <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-users"></i></div><div><div class="stat-val">${customers.length}</div><div class="stat-lbl">Clientes</div></div></div>
+      <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-dollar-sign"></i></div><div><div class="stat-val">${formatPrice(revenue)}</div><div class="stat-lbl">Ingresos</div></div></div>`;
+
+    const recent = orders.slice(0, 5);
+    document.getElementById('recent-orders-table').innerHTML = recent.length
+      ? `<table><thead><tr><th>ID</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>
+          ${recent.map(o => `<tr>
+            <td><strong>#${String(o.id).slice(-6)}</strong></td>
+            <td>${o.customer?.name || 'N/A'}</td>
+            <td>${formatPrice(o.total)}</td>
+            <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+            <td>${formatDate(o.created_at)}</td>
+          </tr>`).join('')}
+        </tbody></table>`
+      : '<p style="color:var(--text-light);text-align:center;padding:2rem;">No hay pedidos aún</p>';
+  }
+
+  function renderProducts() {
+    const products = G9Store.getProducts();
+    document.getElementById('products-table').innerHTML = products.length
+      ? `<table><thead><tr><th>Imagen</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Categoría</th></tr></thead><tbody>
+          ${products.map(p => {
+            const cat = G9Store.getCategory(p.category_id);
+            return `<tr>
+              <td><img src="${p.images[0] || ''}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;"></td>
+              <td><strong>${p.name}</strong></td>
+              <td>${formatPrice(p.price)}</td>
+              <td><span class="stock-pill ${p.stock > 0 ? 'in' : 'out'}">${p.stock > 0 ? p.stock + ' uds.' : 'Agotado'}</span></td>
+              <td>${cat?.name || '—'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody></table>`
+      : '<p style="color:var(--text-light);text-align:center;padding:2rem;">No hay productos. Agrégalos en <code>data/products.json</code></p>';
+  }
+
+  function renderCategories() {
+    const cats = G9Store.getCategories();
+    document.getElementById('categories-table').innerHTML = cats.length
+      ? `<table><thead><tr><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Productos</th></tr></thead><tbody>
+          ${cats.map(c => {
+            const count = G9Store.getProducts({ category_id: c.id }).length;
+            return `<tr>
+              <td><img src="${c.image || ''}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;"></td>
+              <td><strong>${c.name}</strong></td>
+              <td style="font-size:.82rem;">${c.description || '—'}</td>
+              <td>${count}</td>
+            </tr>`;
+          }).join('')}
+        </tbody></table>`
+      : '<p style="color:var(--text-light);text-align:center;padding:2rem;">No hay categorías</p>';
+  }
+
+  function renderOrders() {
+    const orders = G9Store.orders.get();
+    document.getElementById('orders-table').innerHTML = orders.length
+      ? `<table><thead><tr><th>ID</th><th>Cliente</th><th>Email</th><th>Total</th><th>Método</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>
+          ${orders.map(o => `<tr>
+            <td><strong>#${String(o.id).slice(-6)}</strong></td>
+            <td>${o.customer?.name || 'N/A'}</td>
+            <td>${o.customer?.email || 'N/A'}</td>
+            <td>${formatPrice(o.total)}</td>
+            <td>${o.payment_method || '—'}</td>
+            <td>
+              <select style="padding:.3rem .6rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);font-size:.8rem;cursor:pointer;" onchange="updateOrderStatus(${o.id}, this.value)">
+                ${['pendiente','procesando','enviado','entregado','cancelado'].map(s => `<option ${o.status === s ? 'selected' : ''} value="${s}">${s}</option>`).join('')}
+              </select>
+            </td>
+            <td>${formatDate(o.created_at)}</td>
+          </tr>`).join('')}
+        </tbody></table>`
+      : '<p style="color:var(--text-light);text-align:center;padding:2rem;">No hay pedidos aún</p>';
+  }
+
+  function updateOrderStatus(id, status) {
+    const orders = G9Store.orders.get();
+    const order = orders.find(o => o.id === id);
+    if (order) {
+      order.status = status;
+      localStorage.setItem('g9_orders', JSON.stringify(orders));
+      showToast('Estado actualizado');
+    }
+  }
+
+  function renderCustomers() {
+    const orders = G9Store.orders.get();
+    const customerMap = {};
+    orders.forEach(o => {
+      if (o.customer?.email) {
+        if (!customerMap[o.customer.email]) {
+          customerMap[o.customer.email] = { ...o.customer, orders: 0, total: 0 };
+        }
+        customerMap[o.customer.email].orders++;
+        customerMap[o.customer.email].total += o.total;
+      }
+    });
+    const customers = Object.values(customerMap);
+    document.getElementById('customers-table').innerHTML = customers.length
+      ? `<table><thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Pedidos</th><th>Total gastado</th></tr></thead><tbody>
+          ${customers.map(c => `<tr>
+            <td><strong>${c.name}</strong></td>
+            <td>${c.email}</td>
+            <td>${c.phone || '—'}</td>
+            <td>${c.orders}</td>
+            <td>${formatPrice(c.total)}</td>
+          </tr>`).join('')}
+        </tbody></table>`
+      : '<p style="color:var(--text-light);text-align:center;padding:2rem;">No hay clientes registrados</p>';
+  }
+</script>
+</body>
+</html>
